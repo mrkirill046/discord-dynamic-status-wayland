@@ -11,9 +11,9 @@ pub fn config_path() -> Result<PathBuf> {
     )
     .ok_or_else(|| anyhow!("Cannot determine config directory"))?;
 
-    let data_dir = proj_dirs.data_dir();
+    let config_dir = proj_dirs.config_dir();
 
-    std::fs::create_dir_all(data_dir)?;
+    std::fs::create_dir_all(config_dir)?;
 
-    Ok(data_dir.join("config.toml"))
+    Ok(config_dir.join("config.toml"))
 }

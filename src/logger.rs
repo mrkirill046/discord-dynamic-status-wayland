@@ -22,7 +22,7 @@ impl Logger {
         )
         .expect("Failed to get application directory");
 
-        let log_dir = proj_dirs.data_dir().join("logs");
+        let log_dir = proj_dirs.cache_dir().join("logs");
 
         fs::create_dir_all(&log_dir).expect("Failed to create log directory");
 

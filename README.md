@@ -134,7 +134,7 @@ cp target/release/discord-dynamic-status-wayland ~/.local/bin/
 chmod +x ~/.local/bin/discord-dynamic-status-wayland
 ```
 
-#### 4. Use or create a service for systemd or whatever you use
+#### 4. Use and you can add the program to startup in Niri / Hyprland
 
 ```bash 
 discord-dynamic-status-wayland 
@@ -142,7 +142,7 @@ discord-dynamic-status-wayland
 
 ### AUR
 
-> Use `yay -S dynamic-drpc-wayland-bin` or `yay -S dynamic-drpc-wayland-git`
+> Use `yay -S dynamic-drpc-wayland-bin` or `yay -S dynamic-drpc-wayland-git` and and you can add the program to startup in Niri / Hyprland
 
 ### NixOS
 

@@ -6,6 +6,7 @@ use std::fs;
 
 pub fn load() -> Result<Config> {
     let path = config_path()?;
+    Logger::info(&format!("Loading config: {:?}", path));
 
     if !path.exists() {
         Logger::debug("Config not found, creating default config...");
