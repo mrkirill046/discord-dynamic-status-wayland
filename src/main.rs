@@ -2,18 +2,18 @@ mod config;
 mod constants;
 mod debounce;
 mod discord;
-mod hyprland;
 mod logger;
 mod rules;
 mod system;
 mod templates;
+mod wm;
 
 use anyhow::Result;
 use debounce::Debouncer;
 use discord::rpc::DiscordRpc;
-use hyprland::events::listen_active_window;
 use logger::Logger;
 use std::time::Duration;
+use wm::listen_active_window;
 
 fn main() {
     if let Err(e) = app() {
@@ -25,6 +25,7 @@ fn app() -> Result<()> {
     Logger::info("Starting application...");
 
     let config = config::load()?;
+    let settings = config.settings.clone();
     let system = system::get_system_info();
     let vars = templates::create_variables(&config, system);
 
@@ -37,7 +38,7 @@ fn app() -> Result<()> {
     Logger::info("Connected to Discord successfully!");
 
     let debouncer = Debouncer::new(
-        Duration::from_secs(config.settings.update_delay),
+        Duration::from_secs(settings.update_delay),
         move |class, title| {
             let rule = rules::resolve_rule(&config, &class);
             let rule = templates::apply(rule.into_owned(), &vars);
@@ -48,7 +49,7 @@ fn app() -> Result<()> {
         },
     );
 
-    listen_active_window(|class, title| {
+    listen_active_window(&settings, |class, title| {
         debouncer.send(class, title);
 
         Ok(())

@@ -110,6 +110,7 @@ dependencies = [
  "discord-rich-presence",
  "regex",
  "serde",
+ "serde_json",
  "toml",
 ]
 

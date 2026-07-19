@@ -6,7 +6,7 @@ use std::collections::HashMap;
 
 pub use loader::load;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct Config {
     pub settings: Settings,
     pub default: RpcRule,

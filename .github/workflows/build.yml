@@ -39,6 +39,6 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/') && runner.os == 'Linux'
         uses: softprops/action-gh-release@v1
         with:
-          files: target/release/discord-dynamic-status-hyprland
+          files: target/release/discord-dynamic-status-wm
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
