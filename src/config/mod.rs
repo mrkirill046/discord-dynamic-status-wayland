@@ -39,6 +39,7 @@ pub struct AppRule {
 pub struct Settings {
     pub app_id: String,
     pub wm: String,
+    pub update_delay: u64,
 }
 
 impl RpcRule {

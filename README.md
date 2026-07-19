@@ -47,6 +47,11 @@ app_id = "1460605258072985705"
 wm = "niri"
 
 
+# Delay before updating Discord RPC after changing window
+# Helps avoid too many RPC updates
+update_delay = 3
+
+
 
 # Default Rich Presence rule
 # This rule is used when no application-specific rule matches
