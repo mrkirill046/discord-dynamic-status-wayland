@@ -1,21 +1,23 @@
 {
   "app_id": "1460605258072985705",
+  "wm": "niri",
+
   "default": {
     "state": "Chilling",
     "details": "At the workspace",
-    "large_text": "Arch Linux-zen x86_64",
-    "large_image": "arch",
-    "small_text": "Hyprland (Wayland)",
-    "small_image": "hyprland"
+
+    "large_text": "{pretty_os}",
+    "large_image": "{os}",
+
+    "small_text": "{wm}",
+    "small_image": "{wm}"
   },
+
   "classes": {
-    "kitty": {
-      "state": "At kitty",
+    "com.mitchellh.ghostty": {
+      "state": "At ghostty",
       "details": "Writing command lines",
-      "large_text": "Arch Linux-zen x86_64",
-      "large_image": "arch",
-      "small_text": "Kitty with ZSH",
-      "small_image": "kitty"
+      "small_text": "Ghostty with Fish"
     }
   }
 }

@@ -1,34 +1,47 @@
+use crate::logger::Logger;
+use anyhow::{Context, Result};
 use std::{
     env,
     io::{BufRead, BufReader},
     os::unix::net::UnixStream,
 };
-use crate::logger::Logger;
 
-pub fn listen_active_window<F>(mut handler: F)
+pub fn listen_active_window<F>(mut handler: F) -> Result<()>
 where
-    F: FnMut(String, String),
+    F: FnMut(String, String) -> Result<()>,
 {
-    let runtime = env::var("XDG_RUNTIME_DIR").expect("XDG_RUNTIME_DIR not set");
-    let sig = env::var("HYPRLAND_INSTANCE_SIGNATURE").expect("HYPRLAND_INSTANCE_SIGNATURE not set");
+    let runtime = env::var("XDG_RUNTIME_DIR").context("XDG_RUNTIME_DIR is missing")?;
+    let sig = env::var("HYPRLAND_INSTANCE_SIGNATURE")
+        .context("HYPRLAND_INSTANCE_SIGNATURE is missing")?;
 
-    Logger::log(&format!("Runtime: {}, Signature: {}", runtime, sig));
+    Logger::debug(&format!("Runtime: {}, Signature: {}", runtime, sig));
 
     let path = format!("{runtime}/hypr/{sig}/.socket2.sock");
-    let stream = UnixStream::connect(path).expect("Failed to connect to Hyprland socket");
+    let stream = UnixStream::connect(path).context("Failed to connect to Hyprland socket")?;
 
     let reader = BufReader::new(stream);
 
-    for line in reader.lines().flatten() {
+    for line in reader.lines() {
+        let line = line.context("Failed to read Hyprland event")?;
+
         if let Some(data) = line.strip_prefix("activewindow>>") {
             let mut parts = data.splitn(2, ',');
 
-            let class = parts.next().unwrap_or("").to_string();
-            let title = parts.next().unwrap_or("").to_string();
+            let class = parts
+                .next()
+                .ok_or_else(|| anyhow::anyhow!("Invalid activewindow event"))?
+                .to_string();
 
-            Logger::log(&format!("Current class: {}, current title: {}", class, title));
+            let title = parts
+                .next()
+                .ok_or_else(|| anyhow::anyhow!("Invalid activewindow event"))?
+                .to_string();
 
-            handler(class, title);
+            Logger::debug(&format!("Current class: {}, title: {}", class, title));
+
+            handler(class, title)?;
         }
     }
+
+    Ok(())
 }

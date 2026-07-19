@@ -1,11 +1,11 @@
-# `discord-dynamic-status-hyprland` 
+# `discord-dynamic-status-wayland` 
 
 ![Rust](https://img.shields.io/badge/Rust-1.70+-orange?style=for-the-badge\&logo=rust)
 ![License MIT](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 ![Platform: Linux](https://img.shields.io/badge/Platform-Linux-blue?style=for-the-badge) 
-![WM](https://img.shields.io/badge/WM-Hyprland-purple?style=for-the-badge)
+![WM](https://img.shields.io/badge/WM-Hyprland+NIRI-purple?style=for-the-badge)
 
-**Dynamic Discord Rich Presence for Hyprland (Wayland).**
+**Dynamic Discord Rich Presence for Hyprland & Niri (Wayland).**
 Automatically updates your Discord status based on the active window.
 
 ---
@@ -13,23 +13,24 @@ Automatically updates your Discord status based on the active window.
 ## ✨ Features
 
 * Shows the current active window in Discord
-* Supports any application (settings in `config.sjon`)
-* Lightweight and fast (Rust + Hyprland events)
-* Works on Hyprland (Wayland)
+* Supports any application (settings in `config.json`)
+* Lightweight and fast (Rust)
+* Works on Hyprland & Niri (Wayland)
+* NixOS is supported
 
 ---
 
 ## 🏗 Installation and Run
 
 ### 1. Clone repository
-> Or use `yay -S dynamic-drpc-hyprland-bin` or `yay -S dynamic-drpc-hyprland-git`
+> Or use `yay -S dynamic-drpc-wayland-bin` or `yay -S dynamic-drpc-wayland-git`
 ```bash
-git clone https://github.com/mrkirill046/discord-dynamic-status-hyprland.git
-cd discord-dynamic-status-hyprland
+git clone https://github.com/mrkirill046/discord-dynamic-status-wayland.git
+cd discord-dynamic-status-wayland
 cargo run --release
 ```
 
-### 2. Configure `config.json` (in the `~/.local/share/dynamic-drpc-hyprland`)
+### 2. Configure `config.json` (in the `~/.local/share/dynamic-drpc-wayland`)
 
 ```json
 {
@@ -37,19 +38,19 @@ cargo run --release
   "default": {
     "state": "Chilling",
     "details": "At the workspace",
-    "large_text": "Arch Linux-zen x86_64",
-    "large_image": "arch",
-    "small_text": "Hyprland (Wayland)",
-    "small_image": "hyprland"
+    "large_text": "NixOS 26.11 (Zokor)",
+    "large_image": "nixos",
+    "small_text": "Niri (Wayland)",
+    "small_image": "niri"
   },
   "classes": {
-    "kitty": {
-      "state": "At kitty",
+    "com.mitchellh.ghostty": {
+      "state": "At ghostty",
       "details": "Writing command lines",
-      "large_text": "Arch Linux-zen x86_64",
-      "large_image": "arch",
-      "small_text": "Kitty with ZSH",
-      "small_image": "kitty"
+      "large_text": "NixOS 26.11 (Zokor)",
+      "large_image": "nixos",
+      "small_text": "Ghostty with Fish",
+      "small_image": "ghostty"
     }
   }
 } // etc

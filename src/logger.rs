@@ -1,14 +1,17 @@
 use crate::constants;
 use chrono::Local;
 use directories::ProjectDirs;
-use lazy_static::lazy_static;
-use std::fs::{self, OpenOptions};
-use std::io::Write;
-use std::sync::Mutex;
+use std::{
+    fs::{self, File, OpenOptions},
+    io::Write,
+    sync::{Mutex, OnceLock},
+};
 
 pub struct Logger {
-    file: Mutex<std::fs::File>,
+    file: Mutex<File>,
 }
+
+static LOGGER: OnceLock<Logger> = OnceLock::new();
 
 impl Logger {
     fn init() -> Self {
@@ -18,40 +21,55 @@ impl Logger {
             constants::APP_NAME,
         )
         .expect("Failed to get application directory");
-        
+
         let log_dir = proj_dirs.data_dir().join("logs");
 
-        if !log_dir.exists() {
-            fs::create_dir_all(&log_dir).expect("Failed to create log directory");
-        }
+        fs::create_dir_all(&log_dir).expect("Failed to create log directory");
 
-        let timestamp = Local::now().format("%Y-%m-%d_%H-%M-%S").to_string();
-        let log_path = log_dir.join(format!("{}.log", timestamp));
+        let timestamp = Local::now().format("%Y-%m-%d_%H-%M-%S");
+        let path = log_dir.join(format!("{timestamp}.log"));
 
         let file = OpenOptions::new()
             .create(true)
             .append(true)
-            .open(&log_path)
+            .open(path)
             .expect("Failed to create log file");
 
-        Logger {
+        Self {
             file: Mutex::new(file),
         }
     }
 
-    pub fn log(message: &str) {
-        lazy_static! {
-            static ref INSTANCE: Logger = Logger::init();
-        }
+    fn instance() -> &'static Logger {
+        LOGGER.get_or_init(|| Logger::init())
+    }
 
+    fn write(level: &str, message: &str) {
         let now = Local::now().format("%Y-%m-%d %H:%M:%S%.3f");
-        let log_line = format!("{} - {}\n", now, message);
+        let line = format!("{} [{}] {}\n", now, level, message);
 
-        print!("{}", log_line);
+        print!("{}", line);
 
-        let mut file = INSTANCE.file.lock().unwrap();
+        let logger = Logger::instance();
 
-        file.write_all(log_line.as_bytes())
-            .expect("Failed to write to log file");
+        let mut file = logger.file.lock().unwrap();
+
+        file.write_all(line.as_bytes()).unwrap();
+    }
+
+    pub fn info(message: &str) {
+        Self::write("INFO", message);
+    }
+
+    pub fn warn(message: &str) {
+        Self::write("WARN", message);
+    }
+
+    pub fn error(message: &str) {
+        Self::write("ERROR", message);
+    }
+
+    pub fn debug(message: &str) {
+        Self::write("DEBUG", message);
     }
 }

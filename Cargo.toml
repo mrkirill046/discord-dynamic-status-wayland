@@ -1,19 +1,20 @@
 [package]
-name = "discord-dynamic-status-hyprland"
+name = "discord-dynamic-status-wayland"
 authors = ["kazuha046"]
-description = "Dynamic Discord Rich Presence based on active Hyprland windows"
-repository = "https://github.com/mrkirill046/discord-dynamic-status-hyprland"
-homepage = "https://github.com/mrkirill046/discord-dynamic-status-hyprland"
+description = "Dynamic Discord Rich Presence based on active Hyprland/Niri windows"
+repository = "https://github.com/mrkirill046/discord-dynamic-status-wayland"
+homepage = "https://github.com/mrkirill046/discord-dynamic-status-wayland"
 license-file = "LICENSE"
-keywords = ["discord", "rpc", "hyprland", "wayland", "dynamic"]
+keywords = ["discord", "rpc", "hyprland", "wayland", "niri"]
 categories = ["command-line-utilities", "games", "network-programming"]
-version = "1.0.0"
+version = "2.0.0"
 edition = "2024"
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-discord-rich-presence = "1.0"
+discord-rich-presence = "1.1"
 chrono = "0.4"
 directories = "6.0"
-lazy_static = "1.5"
+anyhow = "1.0"
+regex = "1.13"

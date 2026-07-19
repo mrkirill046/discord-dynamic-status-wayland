@@ -1,30 +1,48 @@
 mod config;
+mod constants;
 mod discord;
 mod hyprland;
-mod rules;
 mod logger;
-mod constants;
+mod rules;
+mod system;
+mod templates;
 
+pub mod utils;
+
+use anyhow::Result;
 use discord::rpc::DiscordRpc;
 use hyprland::events::listen_active_window;
 use logger::Logger;
 
 fn main() {
-    Logger::log("Starting application...");
+    if let Err(e) = app() {
+        Logger::error(&format!("{:#}", e));
+    }
+}
 
-    let config = config::Config::load();
+fn app() -> Result<()> {
+    Logger::info("Starting application...");
 
-    Logger::log("Config loaded successfully!");
+    let config = config::load()?;
+    let system = system::get_system_info();
+    let vars = templates::create_variables(&config, system);
+
+    Logger::info("Config loaded successfully!");
 
     let mut rpc = DiscordRpc::new(&config.app_id);
 
-    rpc.connect();
+    rpc.connect()?;
 
-    Logger::log("Connected to Discord successfully!");
+    Logger::info("Connected to Discord successfully!");
 
     listen_active_window(|class, title| {
         let rule = rules::resolve_rule(&config, &class);
+        let rule = templates::apply(rule.into_owned(), &vars);
 
-        rpc.update(rule, &title);
-    });
+        rpc.update(&rule, &title)?;
+
+        Ok(())
+    })?;
+
+    Ok(())
 }
