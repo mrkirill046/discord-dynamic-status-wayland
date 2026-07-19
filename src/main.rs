@@ -7,8 +7,6 @@ mod rules;
 mod system;
 mod templates;
 
-pub mod utils;
-
 use anyhow::Result;
 use discord::rpc::DiscordRpc;
 use hyprland::events::listen_active_window;
@@ -29,7 +27,7 @@ fn app() -> Result<()> {
 
     Logger::info("Config loaded successfully!");
 
-    let mut rpc = DiscordRpc::new(&config.app_id);
+    let mut rpc = DiscordRpc::new(&config.settings.app_id);
 
     rpc.connect()?;
 

@@ -1,0 +1,25 @@
+[settings]
+app_id = "1460605258072985705"
+wm = "niri"
+
+[default]
+state = "Chilling"
+details = "At the workspace"
+
+large_text = "{pretty_os}"
+large_image = "{os}"
+
+small_text = "{wm}"
+small_image = "{wm}"
+
+[classes.ghostty]
+match = "com.mitchellh.ghostty"
+
+state = "At ghostty"
+details = "Writing command lines"
+small_text = "Ghostty with Fish"
+
+[classes.code]
+state = "At VSCode"
+details = "Developing some programs"
+small_text = "VSCode"

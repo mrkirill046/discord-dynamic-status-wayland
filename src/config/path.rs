@@ -15,5 +15,5 @@ pub fn config_path() -> Result<PathBuf> {
 
     std::fs::create_dir_all(data_dir)?;
 
-    Ok(data_dir.join("config.json"))
+    Ok(data_dir.join("config.toml"))
 }

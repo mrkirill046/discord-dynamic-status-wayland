@@ -1,7 +1,6 @@
 mod loader;
 mod path;
 
-use crate::utils::normalize_class;
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -9,10 +8,9 @@ pub use loader::load;
 
 #[derive(Deserialize)]
 pub struct Config {
+    pub settings: Settings,
     pub default: RpcRule,
-    pub classes: HashMap<String, RpcRule>,
-    pub app_id: String,
-    pub wm: String,
+    pub classes: HashMap<String, AppRule>,
 }
 
 #[derive(Deserialize, Clone)]
@@ -29,8 +27,22 @@ pub struct RpcRule {
     pub small_text: Option<String>,
 }
 
+#[derive(Deserialize, Clone)]
+pub struct AppRule {
+    pub r#match: Option<String>,
+
+    #[serde(flatten)]
+    pub rule: RpcRule,
+}
+
+#[derive(Deserialize, Clone)]
+pub struct Settings {
+    pub app_id: String,
+    pub wm: String,
+}
+
 impl RpcRule {
-    pub fn merge(&self, override_rule: &RpcRule, class: &str) -> RpcRule {
+    pub fn merge(&self, override_rule: &RpcRule, app_name: &str) -> RpcRule {
         RpcRule {
             state: override_rule.state.clone().or(self.state.clone()),
 
@@ -47,7 +59,7 @@ impl RpcRule {
             small_image: override_rule
                 .small_image
                 .clone()
-                .or(Some(normalize_class(class))),
+                .or(Some(app_name.to_string())),
 
             small_text: override_rule.small_text.clone().or(self.small_text.clone()),
         }

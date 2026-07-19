@@ -11,7 +11,7 @@ pub fn create_variables(config: &Config, system: SystemInfo) -> HashMap<String, 
     HashMap::from([
         ("pretty_os".into(), system.pretty_os),
         ("os".into(), system.os),
-        ("wm".into(), config.wm.clone()),
+        ("wm".into(), config.settings.wm.clone()),
     ])
 }
 

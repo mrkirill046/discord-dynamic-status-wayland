@@ -10,13 +10,14 @@ pub fn load() -> Result<Config> {
     if !path.exists() {
         Logger::debug("Config not found, creating default config...");
 
-        let default = include_str!("default-config.json");
+        let default = include_str!("default-config.toml");
 
         fs::write(&path, default)?;
     }
 
     let data = fs::read_to_string(&path)?;
-    let config = serde_json::from_str(&data)?;
+    let config =
+        toml::from_str(&data).map_err(|e| anyhow::anyhow!("Failed to parse config.toml: {}", e))?;
 
     Logger::debug("Config loaded");
 
