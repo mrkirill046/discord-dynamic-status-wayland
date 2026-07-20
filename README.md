@@ -169,7 +169,7 @@ discord-dynamic-status-wayland
 }
 ```
 
-### 2. Pass flake inputs to home-manager
+#### 2. Pass flake inputs to home-manager
 
 > Make sure your home-manager configuration receives flake inputs:
 
