@@ -30,7 +30,7 @@ cd discord-dynamic-status-wayland
 cargo run --release
 ```
 
-### 2. Configure `config.toml` (in the `~/.local/share/dynamic-drpc-wayland`)
+### 2. Configure `config.toml` (in the `~/.config/dynamic-drpc-wayland`)
 
 ```toml
 [settings]
@@ -102,6 +102,14 @@ details = "Writing command lines"
 # You can also override another default settings
 # If a setting is not specified here, the value from the default section will be used
 small_text = "Ghostty with Fish"
+
+
+
+# Example:
+[classes.code]
+state = "At VSCode"
+details = "Developing some programs"
+small_text = "VSCode"
 ```
 
 > **Important:** use your **Application ID** from Discord Developer Portal, **not a bot token**.
@@ -146,7 +154,107 @@ discord-dynamic-status-wayland
 
 ### NixOS
 
-> In the future
+>Using flake with home-manager
+
+#### 1. Add the flake input  in your `flake.nix`:
+
+```nix
+{
+  inputs = {
+    dynamic-drpc-wayland = {
+      url = "github:mrkirill046/discord-dynamic-status-wayland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+}
+```
+
+### 2. Pass flake inputs to home-manager
+
+> Make sure your home-manager configuration receives flake inputs:
+
+```nix
+{
+  home-manager = {
+    users.your-user = import ./home.nix;
+
+    extraSpecialArgs = {
+      inherit inputs;
+    };
+  };
+}
+```
+
+#### 3. Import the home-manager module in your `home.nix`:
+
+```nix
+{
+  imports = [
+    inputs.dynamic-drpc-wayland.homeManagerModules.default
+  ];
+}
+```
+
+#### 4. Enable the service:
+
+```nix
+{
+  services.dynamic-drpc-wayland = {
+    enable = true;
+  };
+}
+```
+
+#### 5. Apply the configuration:
+
+```bash
+sudo nixos-rebuild switch --flake /etc/nixos/#your-host
+```
+
+> The service will be started automatically through `systemd --user`.
+
+#### 6. Configuration
+
+> The service generates `~/.config/dynamic-drpc-wayland/config.toml`
+
+> You can configure default status and application rules: [Go to Settings](#2-configure-configtoml-in-the-localsharedynamic-drpc-wayland)
+```nix
+{
+  services.dynamic-drpc-wayland = {
+    enable = true;
+
+    settings = {
+      app_id = "YOUR_APP_ID";
+      wm = "niri";
+      update_delay = 3;
+    };
+
+    default = {
+      state = "Chilling";
+      details = "At the workspace";
+
+      large_text = "{pretty_os}";
+      large_image = "{os}";
+    };
+
+    classes = {
+      ghostty = {
+        match = "com.mitchellh.ghostty";
+
+        state = "At ghostty";
+        details = "Writing command lines";
+        small_text = "Ghostty with Fish";
+      };
+    
+      code = {
+        state = "At VSCode";
+        details = "Developing some programs";
+        small_text = "VSCode";
+      };
+    };
+  };
+}
+```
 
 ---
 
