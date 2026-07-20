@@ -20,6 +20,11 @@ state = "At ghostty"
 details = "Writing command lines"
 small_text = "Ghostty with Fish"
 
+[classes.kitty]
+state = "At kitty"
+details = "Writing command lines"
+small_text = "Kitty with Fish"
+
 [classes.code]
 state = "At VSCode"
 details = "Developing some programs"

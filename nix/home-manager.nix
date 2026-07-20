@@ -73,6 +73,12 @@ in
           small_text = "Ghostty with Fish";
         };
 
+        kitty = {
+					state = "At kitty";
+					details = "Writing command lines";
+					small_text = "Kitty with Fish";
+        };
+
         code = {
           state = "At VSCode";
           details = "Developing some programs";
