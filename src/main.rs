@@ -33,7 +33,18 @@ fn app() -> Result<()> {
 
     let mut rpc = DiscordRpc::new(&config.settings.app_id);
 
-    rpc.connect()?;
+    loop {
+        match rpc.connect() {
+            Ok(_) => break,
+            Err(e) => {
+                Logger::warn(&format!(
+                    "Discord is not running yet, or there may be an internet connectivity issue: {e}"
+                ));
+
+                std::thread::sleep(Duration::from_secs(2));
+            }
+        }
+    }
 
     Logger::info("Connected to Discord successfully!");
 
