@@ -150,7 +150,7 @@ discord-dynamic-status-wayland
 
 ### AUR
 
-> Use `yay -S dynamic-drpc-wayland-bin` or `yay -S dynamic-drpc-wayland-git` and and you can add the program to startup in Niri / Hyprland
+> Use `yay -S dynamic-drpc-wayland-bin` or `yay -S dynamic-drpc-wayland-git` and you can add the program to startup in Niri / Hyprland
 
 ### NixOS
 
