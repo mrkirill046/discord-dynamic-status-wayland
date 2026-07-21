@@ -43,7 +43,7 @@ app_id = "1460605258072985705"
 # Current Wayland compositor / window manager
 # Supported values:
 # - niri
-# - wm
+# - hyprland
 wm = "niri"
 
 
