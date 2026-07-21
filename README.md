@@ -82,7 +82,7 @@ small_image = "{wm}"
 # Application-specific Rich Presence rule
 # Section name is used as the Discord asset name
 # Example:
-# [ghostty] -> small_image = "ghostty"
+# [classes.ghostty] -> small_image = "ghostty"
 #
 # "match" is the real Wayland application class
 # You can find it using tools like:
